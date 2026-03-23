@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\ProductController;
+use App\Controllers\ProductCtrl;
 
-$productController = new ProductController();
-$productController->index();
+$productCtrl = new ProductCtrl();
+$productCtrl->index();

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\ProductModel;
 
-class ProductController
+class ProductCtrl
 {
     public function index()
     {

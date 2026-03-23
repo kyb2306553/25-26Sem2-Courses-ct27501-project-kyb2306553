@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\AboutController;
+use App\Controllers\AboutCtrl;
 
-$aboutController = new AboutController();
-$aboutController->index();
+$aboutCtrl = new AboutCtrl();
+$aboutCtrl->index();

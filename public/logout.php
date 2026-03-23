@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\AuthController;
+use App\Controllers\AuthCtrl;
 
-$authController = new AuthController();
-$authController->logout();
+$authCtrl = new AuthCtrl();
+$authCtrl->logout();

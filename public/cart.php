@@ -2,29 +2,29 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\CartController;
+use App\Controllers\CartCtrl;
 
-$cartController = new CartController();
+$cartCtrl = new CartCtrl();
 $action = $_GET['action'] ?? 'index';
 
 switch ($action) {
     case 'add':
-        $cartController->add();
+        $cartCtrl->add();
         break;
 
     case 'update':
-        $cartController->update();
+        $cartCtrl->update();
         break;
 
     case 'remove':
-        $cartController->remove();
+        $cartCtrl->remove();
         break;
 
     case 'place-order':
-        $cartController->placeOrder();
+        $cartCtrl->placeOrder();
         break;
 
     default:
-        $cartController->index();
+        $cartCtrl->index();
         break;
 }

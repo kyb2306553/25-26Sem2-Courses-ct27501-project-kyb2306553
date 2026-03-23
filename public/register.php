@@ -2,17 +2,17 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\AuthController;
+use App\Controllers\AuthCtrl;
 
-$authController = new AuthController();
+$authCtrl = new AuthCtrl();
 $action = $_GET['action'] ?? 'index';
 
 switch ($action) {
     case 'register':
-        $authController->register();
+        $authCtrl->register();
         break;
 
     default:
-        $authController->showRegister();
+        $authCtrl->showRegister();
         break;
 }

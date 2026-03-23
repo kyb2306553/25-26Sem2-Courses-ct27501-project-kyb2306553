@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\CartModel;
 use App\Models\ProductModel;
 
-class CartController
+class CartCtrl
 {
     private CartModel $cartModel;
     private ProductModel $productModel;

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 
-class AuthController
+class AuthCtrl
 {
     private UserModel $userModel;
 

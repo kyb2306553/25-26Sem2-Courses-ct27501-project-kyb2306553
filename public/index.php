@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\HomeController;
+use App\Controllers\HomeCtrl;
 
-$homeController = new HomeController();
-$homeController->index();
+$homeCtrl = new HomeCtrl();
+$homeCtrl->index();

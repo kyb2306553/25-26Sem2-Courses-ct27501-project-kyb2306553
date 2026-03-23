@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class AboutController
+class AboutCtrl
 {
     public function index()
     {

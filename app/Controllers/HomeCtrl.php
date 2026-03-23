@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\ProductModel;
 
-class HomeController
+class HomeCtrl
 {
     public function index()
     {

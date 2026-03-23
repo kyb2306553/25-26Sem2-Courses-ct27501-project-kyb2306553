@@ -13,8 +13,7 @@
                 <div class="row g-4">
                     <div class="col-md-5">
                         <img src="<?php echo htmlspecialchars($imagePath); ?>"
-                            alt="<?php echo htmlspecialchars($product['name']); ?>"
-                            class="detail-img img-fluid rounded">
+                            alt="<?php echo htmlspecialchars($product['name']); ?>" class="detail-img img-fluid rounded">
                     </div>
 
                     <div class="col-md-7">
