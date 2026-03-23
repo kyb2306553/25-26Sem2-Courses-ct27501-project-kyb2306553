@@ -63,8 +63,7 @@ class ProductModel
     public function getProductById($productId)
     {
         $sql = "
-            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name,
-                   b.name AS brand_name, pi.image_path
+            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name, b.name AS brand_name, pi.image_path
             FROM products p
             INNER JOIN categories c ON p.category_id = c.id
             LEFT JOIN brands b ON p.brand_id = b.id
@@ -110,8 +109,7 @@ class ProductModel
         $placeholders = implode(',', array_fill(0, count($productIds), '?'));
 
         $sql = "
-            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name,
-                   b.name AS brand_name, pi.image_path
+            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name, b.name AS brand_name, pi.image_path
             FROM products p
             INNER JOIN categories c ON p.category_id = c.id
             LEFT JOIN brands b ON p.brand_id = b.id
