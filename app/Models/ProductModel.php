@@ -63,7 +63,8 @@ class ProductModel
     public function getProductById($productId)
     {
         $sql = "
-            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name, b.name AS brand_name, pi.image_path
+            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name,
+                b.name AS brand_name, pi.image_path
             FROM products p
             INNER JOIN categories c ON p.category_id = c.id
             LEFT JOIN brands b ON p.brand_id = b.id
@@ -109,7 +110,8 @@ class ProductModel
         $placeholders = implode(',', array_fill(0, count($productIds), '?'));
 
         $sql = "
-            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name, b.name AS brand_name, pi.image_path
+            SELECT p.id, p.name, p.price, p.stock, p.description, c.name AS category_name,
+                b.name AS brand_name, pi.image_path
             FROM products p
             INNER JOIN categories c ON p.category_id = c.id
             LEFT JOIN brands b ON p.brand_id = b.id
@@ -170,4 +172,64 @@ class ProductModel
             static fn($imagePath) => $imagePath !== ''
         ));
     }
+
+    //thêm
+
+public function createProduct($data, $imagePath) {
+    try {
+        $this->conn->beginTransaction();
+
+        $sql = "INSERT INTO products (name, price, stock, description, category_id, brand_id) 
+                VALUES (:name, :price, :stock, :description, :category_id, :brand_id) RETURNING id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            ':name' => $data['name'],
+            ':price' => $data['price'],
+            ':stock' => $data['stock'],
+            ':description' => $data['description'],
+            ':category_id' => $data['category_id'],
+            ':brand_id' => $data['brand_id']
+        ]);
+        $productId = $stmt->fetchColumn();
+
+        if ($imagePath) {
+            $sqlImg = "INSERT INTO product_images (product_id, image_path, is_main) VALUES (?, ?, true)";
+            $this->conn->prepare($sqlImg)->execute([$productId, $imagePath]);
+        }
+
+        $this->conn->commit();
+        return true;
+    } catch (\Exception $e) {
+        $this->conn->rollBack();
+        return false;
+    }
+}
+
+public function updateProduct($id, $data, $imagePath = null) {
+    $sql = "UPDATE products SET name = :name, price = :price, stock = :stock, 
+            description = :description, category_id = :category_id, brand_id = :brand_id 
+            WHERE id = :id";
+    $stmt = $this->conn->prepare($sql);
+    $result = $stmt->execute([
+        ':name' => $data['name'],
+        ':price' => $data['price'],
+        ':stock' => $data['stock'],
+        ':description' => $data['description'],
+        ':category_id' => $data['category_id'],
+        ':brand_id' => $data['brand_id'],
+        ':id' => $id
+    ]);
+
+    if ($imagePath) {
+        $this->conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
+        $this->conn->prepare("INSERT INTO product_images (product_id, image_path, is_main) VALUES (?, ?, true)")->execute([$id, $imagePath]);
+    }
+    return $result;
+}
+
+public function deleteProduct($id) {
+    $this->conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
+    $stmt = $this->conn->prepare("DELETE FROM products WHERE id = ?");
+    return $stmt->execute([$id]);
+}
 }
