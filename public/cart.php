@@ -2,9 +2,10 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-use App\Controllers\CartCtrl;
+use App\Controllers\CartController;
 
-$cartCtrl = new CartCtrl();
+
+$cartCtrl = new CartController();
 $action = $_GET['action'] ?? 'index';
 
 switch ($action) {

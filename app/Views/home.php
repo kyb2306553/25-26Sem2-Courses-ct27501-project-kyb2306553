@@ -2,7 +2,7 @@
     <img src="/image/banner.jpg" alt="Banner">
 
     <div class="hero__content">
-        <h1>Sportify</h1>
+        <h1>Sport Shop</h1>
         <p>Phong cách thể thao hiện đại</p>
         <a href="/products.php" class="hero__btn">Khám phá</a>
     </div>

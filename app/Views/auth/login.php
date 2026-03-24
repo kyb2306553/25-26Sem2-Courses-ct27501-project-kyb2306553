@@ -13,8 +13,8 @@
 
             <form action="/login.php?action=login" method="POST">
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="text" id="phone" name="phone" class="form-control" required>
                 </div>
 
                 <div class="mb-3">

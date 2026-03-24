@@ -18,8 +18,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
+                    <label for="email" class="form-label">Email (không bắt buộc)</label>
+                    <input type="email" id="email" name="email" class="form-control">
                 </div>
 
                 <div class="mb-3">

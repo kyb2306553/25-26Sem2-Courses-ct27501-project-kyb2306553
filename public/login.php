@@ -3,7 +3,6 @@
 require_once __DIR__ . '/bootstrap.php';
 
 use App\Controllers\AuthController;
-use App\Controllers\AuthCtrl;
 
 $authCtrl = new AuthController();
 $action = $_GET['action'] ?? 'index';

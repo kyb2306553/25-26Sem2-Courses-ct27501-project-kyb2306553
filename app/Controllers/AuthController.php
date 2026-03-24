@@ -41,25 +41,25 @@ class AuthController
             $this->redirect('/login.php');
         }
 
-        $email = trim((string) ($_POST['email'] ?? ''));
+        $phone = trim((string) ($_POST['phone'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
-        if ($email === '' || $password === '') {
-            $_SESSION['auth_error'] = 'Vui lòng nhập email và mật khẩu.';
+        if ($phone === '' || $password === '') {
+            $_SESSION['auth_error'] = 'Vui lòng nhập số điện thoại và mật khẩu.';
             $this->redirect('/login.php');
         }
 
-        $user = $this->userModel->findByEmail($email);
+        $user = $this->userModel->findByPhone($phone);
 
         if ($user === null || !password_verify($password, (string) $user['password_hash'])) {
-            $_SESSION['auth_error'] = 'Email hoặc mật khẩu không đúng.';
+            $_SESSION['auth_error'] = 'Số điện thoại hoặc mật khẩu không đúng.';
             $this->redirect('/login.php');
         }
 
         $_SESSION['user'] = [
             'id' => (int) $user['id'],
             'full_name' => (string) $user['full_name'],
-            'email' => (string) $user['email'],
+            'email' => $user['email'] !== null ? (string) $user['email'] : null,
             'role' => (string) $user['role'],
             'phone' => (string) $user['phone'],
         ];
@@ -84,13 +84,18 @@ class AuthController
         $password = (string) ($_POST['password'] ?? '');
         $confirmPassword = (string) ($_POST['confirm_password'] ?? '');
 
-        if ($fullName === '' || $email === '' || $phone === '' || $password === '') {
-            $_SESSION['auth_error'] = 'Vui lòng nhập đầy đủ thông tin.';
+        if ($fullName === '' || $phone === '' || $password === '') {
+            $_SESSION['auth_error'] = 'Vui lòng nhập họ tên, số điện thoại và mật khẩu.';
             $this->redirect('/register.php');
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['auth_error'] = 'Email không hợp lệ.';
+            $this->redirect('/register.php');
+        }
+
+        if (!preg_match('/^[0-9+\-\s().]{8,20}$/', $phone)) {
+            $_SESSION['auth_error'] = 'Số điện thoại không hợp lệ.';
             $this->redirect('/register.php');
         }
 
@@ -99,8 +104,13 @@ class AuthController
             $this->redirect('/register.php');
         }
 
-        if ($this->userModel->findByEmail($email) !== null) {
+        if ($email !== '' && $this->userModel->findByEmail($email) !== null) {
             $_SESSION['auth_error'] = 'Email này đã tồn tại.';
+            $this->redirect('/register.php');
+        }
+
+        if ($this->userModel->phoneExists($phone)) {
+            $_SESSION['auth_error'] = 'Số điện thoại này đã tồn tại.';
             $this->redirect('/register.php');
         }
 
@@ -112,13 +122,14 @@ class AuthController
             $this->redirect('/register.php');
         }
 
-        $_SESSION['auth_success'] = 'Đăng ký thành công. Mời bạn đăng nhập.';
+        $_SESSION['auth_success'] = 'Đăng ký thành công. Mời bạn đăng nhập bằng số điện thoại.';
         $this->redirect('/login.php');
     }
 
     public function logout()
     {
-        unset($_SESSION['user']);
+        unset($_SESSION['user'], $_SESSION['cart']);
+        session_regenerate_id(true);
         $_SESSION['auth_success'] = 'Đã đăng xuất.';
         $this->redirect('/login.php');
     }
