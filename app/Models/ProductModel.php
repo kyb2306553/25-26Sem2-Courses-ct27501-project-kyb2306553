@@ -212,12 +212,12 @@ public function updateProduct($id, $data, $imagePath = null) {
     $stmt = $this->conn->prepare($sql);
     $result = $stmt->execute([
         ':name' => $data['name'],
-        ':price' => $data['price'],
-        ':stock' => $data['stock'],
-        ':description' => $data['description'],
-        ':category_id' => $data['category_id'],
-        ':brand_id' => $data['brand_id'],
-        ':id' => $id
+        ':price' => (int)$data['price'],
+        ':stock' => (int)$data['stock'],
+        ':description'  => !empty($data['description']) ? $data['description'] : null,
+        ':category_id' => (int)$data['category_id'],
+        ':brand_id' => !empty($data['brand_id']) ? (int)$data['brand_id'] : null,
+        ':id' => (int)$id
     ]);
 
     if ($imagePath) {
