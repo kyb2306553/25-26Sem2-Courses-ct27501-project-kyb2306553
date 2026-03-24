@@ -33,6 +33,14 @@ $currentUser = $_SESSION['user'] ?? null;
                         href="/index.php">Trang chủ</a>
                     <a class="nav-link <?php echo in_array($currentPage, ['products.php', 'product-detail.php'], true) ? 'active' : ''; ?>"
                         href="/products.php">Sản phẩm</a>
+                    
+                    <?php if ($currentUser && ($currentUser['role'] ?? '') === 'admin') : ?>
+                        <a class="nav-link <?php echo (strpos($currentUrl, 'admin') === 0) ? 'active' : ''; ?> text-danger fw-bold" 
+                            href="/index.php?url=admin">
+                            <i class="bi bi-gear-fill"></i> QUẢN TRỊ
+                        </a>
+                    <?php endif; ?>
+
                     <a class="nav-link <?php echo $currentPage === 'about.php' ? 'active' : ''; ?>" href="/about.php">Về
                         chúng tôi</a>
                     <a class="nav-link <?php echo $currentPage === 'cart.php' ? 'active' : ''; ?>" href="/cart.php">Giỏ
