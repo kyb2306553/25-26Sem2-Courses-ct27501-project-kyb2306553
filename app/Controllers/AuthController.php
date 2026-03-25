@@ -41,6 +41,14 @@ class AuthController
             $this->redirect('/login.php');
         }
 
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['auth_error'] = 'Phiên làm việc không hợp lệ.';
+            $this->redirect('/login.php');
+        }
+
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
@@ -55,6 +63,9 @@ class AuthController
             $_SESSION['auth_error'] = 'Số điện thoại hoặc mật khẩu không đúng.';
             $this->redirect('/login.php');
         }
+
+        session_regenerate_id(true);
+        $_SESSION['sesskey'] = bin2hex(random_bytes(32));
 
         $_SESSION['user'] = [
             'id' => (int) $user['id'],
@@ -75,6 +86,14 @@ class AuthController
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/register.php');
+        }
+
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['auth_error'] = 'Phiên làm việc không hợp lệ.';
             $this->redirect('/register.php');
         }
 
@@ -128,8 +147,21 @@ class AuthController
 
     public function logout()
     {
-        unset($_SESSION['user'], $_SESSION['cart']);
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/index.php');
+        }
+
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['auth_error'] = 'Phiên làm việc không hợp lệ.';
+            $this->redirect('/index.php');
+        }
+
+        unset($_SESSION['user']);
         session_regenerate_id(true);
+        $_SESSION['sesskey'] = bin2hex(random_bytes(32));
         $_SESSION['auth_success'] = 'Đã đăng xuất.';
         $this->redirect('/login.php');
     }

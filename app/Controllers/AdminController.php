@@ -30,6 +30,13 @@ class AdminController
         $brands = $this->productModel->getAllBrands();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (
+                !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+                !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+            ) {
+                $this->redirect('/index.php?url=admin/create&msg=error');
+            }
+
             $imagePath = $this->handleUpload();
 
             if ($this->productModel->createProduct($_POST, $imagePath)) {
@@ -60,6 +67,13 @@ class AdminController
         $brands = $this->productModel->getAllBrands();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (
+                !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+                !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+            ) {
+                $this->redirect('/index.php?url=admin/edit/' . $productId . '&msg=error');
+            }
+
             $imagePath = $this->handleUpload();
 
             if ($this->productModel->updateProduct($productId, $_POST, $imagePath)) {
@@ -78,6 +92,13 @@ class AdminController
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('/index.php?url=admin/index');
+        }
+
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $this->redirect('/index.php?url=admin/index&msg=error');
         }
 
         $productId = (int) $id;

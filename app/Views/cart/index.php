@@ -32,6 +32,7 @@
                         </div>
 
                         <form action="/cart.php?action=update" method="POST">
+                            <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
                             <div class="table-responsive">
                                 <table class="table align-middle cart-table">
                                     <thead>
@@ -71,8 +72,14 @@
                                                 </td>
                                                 <td><?php echo number_format((float) $item['subtotal'], 0, ',', '.'); ?> đ</td>
                                                 <td class="text-end">
-                                                    <a href="/cart.php?action=remove&id=<?php echo (int) $item['id']; ?>"
-                                                        class="btn btn-sm btn-outline-danger">Xóa</a>
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        formaction="/cart.php?action=remove"
+                                                        formmethod="POST"
+                                                        name="product_id"
+                                                        value="<?php echo (int) $item['id']; ?>">
+                                                        Xóa
+                                                    </button>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -91,6 +98,7 @@
                     <div class="cart-card bg-white shadow-sm rounded-4 p-4 mb-4">
                         <h4 class="mb-3">Thông tin thanh toán</h4>
                         <form action="/cart.php?action=place-order" method="POST">
+                            <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
                             <div class="mb-3">
                                 <label class="form-label">Họ và tên</label>
                                 <input type="text" name="full_name" class="form-control" placeholder="Nhập họ tên khách hàng">

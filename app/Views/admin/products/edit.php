@@ -14,6 +14,7 @@
                 </div>
                 <div class="card-body p-4">
                     <form action="/index.php?url=admin/edit/<?php echo (int) $product['id']; ?>" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Tên sản phẩm</label>

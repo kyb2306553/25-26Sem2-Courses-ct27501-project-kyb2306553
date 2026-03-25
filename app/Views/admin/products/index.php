@@ -58,6 +58,7 @@
                             <div class="d-inline-flex gap-1">
                                 <a href="/index.php?url=admin/edit/<?php echo (int) $p['id']; ?>" class="btn btn-sm btn-outline-warning">Sửa</a>
                                 <form action="/index.php?url=admin/delete/<?php echo (int) $p['id']; ?>" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">
+                                    <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
                                 </form>
                             </div>

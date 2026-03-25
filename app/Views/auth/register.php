@@ -12,6 +12,7 @@
             <?php } ?>
 
             <form action="/register.php?action=register" method="POST">
+                <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
                 <div class="mb-3">
                     <label for="full_name" class="form-label">Họ và tên</label>
                     <input type="text" id="full_name" name="full_name" class="form-control" required>

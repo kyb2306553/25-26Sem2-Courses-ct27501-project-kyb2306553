@@ -41,6 +41,14 @@ class CartController
             $this->redirect('/products.php');
         }
 
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['error_message'] = 'Phiên làm việc không hợp lệ.';
+            $this->redirect('/products.php');
+        }
+
         $productId = isset($_POST['product_id']) ? (int) $_POST['product_id'] : 0;
         $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
         $quantity = max($quantity, 1);
@@ -71,6 +79,14 @@ class CartController
             $this->redirect('/cart.php');
         }
 
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['error_message'] = 'Phiên làm việc không hợp lệ.';
+            $this->redirect('/cart.php');
+        }
+
         $quantities = $_POST['quantities'] ?? [];
 
         if (!is_array($quantities)) {
@@ -95,7 +111,19 @@ class CartController
     {
         $this->requireLogin();
 
-        $productId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/cart.php');
+        }
+
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['error_message'] = 'Phiên làm việc không hợp lệ.';
+            $this->redirect('/cart.php');
+        }
+
+        $productId = isset($_POST['product_id']) ? (int) $_POST['product_id'] : 0;
 
         if ($productId > 0) {
             $this->cartModel->remove($productId);
@@ -110,6 +138,14 @@ class CartController
         $this->requireLogin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/cart.php');
+        }
+
+        if (
+            !isset($_POST['sesskey'], $_SESSION['sesskey']) ||
+            !hash_equals((string) $_SESSION['sesskey'], (string) $_POST['sesskey'])
+        ) {
+            $_SESSION['error_message'] = 'Phiên làm việc không hợp lệ.';
             $this->redirect('/cart.php');
         }
 

@@ -12,6 +12,7 @@
             <?php } ?>
 
             <form action="/login.php?action=login" method="POST">
+                <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
                 <div class="mb-3">
                     <label for="phone" class="form-label">Số điện thoại</label>
                     <input type="text" id="phone" name="phone" class="form-control" required>
