@@ -36,7 +36,7 @@ class UserModel
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $user ?: null;
+        return $user ? $user : null;
     }
 
     public function phoneExists($phone)
