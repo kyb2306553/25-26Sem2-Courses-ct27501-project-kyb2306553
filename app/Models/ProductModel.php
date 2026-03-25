@@ -173,63 +173,65 @@ class ProductModel
         ));
     }
 
-    //thêm
 
-public function createProduct($data, $imagePath) {
-    try {
-        $this->conn->beginTransaction();
+    public function createProduct($data, $imagePath)
+    {
+        try {
+            $this->conn->beginTransaction();
 
-        $sql = "INSERT INTO products (name, price, stock, description, category_id, brand_id) 
+            $sql = "INSERT INTO products (name, price, stock, description, category_id, brand_id) 
                 VALUES (:name, :price, :stock, :description, :category_id, :brand_id) RETURNING id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([
-            ':name' => $data['name'],
-            ':price' => $data['price'],
-            ':stock' => $data['stock'],
-            ':description' => $data['description'],
-            ':category_id' => $data['category_id'],
-            ':brand_id' => $data['brand_id']
-        ]);
-        $productId = $stmt->fetchColumn();
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([
+                ':name' => $data['name'],
+                ':price' => $data['price'],
+                ':stock' => $data['stock'],
+                ':description' => $data['description'],
+                ':category_id' => $data['category_id'],
+                ':brand_id' => $data['brand_id']
+            ]);
+            $productId = $stmt->fetchColumn();
 
-        if ($imagePath) {
-            $sqlImg = "INSERT INTO product_images (product_id, image_path, is_main) VALUES (?, ?, true)";
-            $this->conn->prepare($sqlImg)->execute([$productId, $imagePath]);
+            if ($imagePath) {
+                $sqlImg = "INSERT INTO product_images (product_id, image_path, is_main) VALUES (?, ?, true)";
+                $this->conn->prepare($sqlImg)->execute([$productId, $imagePath]);
+            }
+
+            $this->conn->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->conn->rollBack();
+            return false;
         }
-
-        $this->conn->commit();
-        return true;
-    } catch (\Exception $e) {
-        $this->conn->rollBack();
-        return false;
     }
-}
 
-public function updateProduct($id, $data, $imagePath = null) {
-    $sql = "UPDATE products SET name = :name, price = :price, stock = :stock, 
+    public function updateProduct($id, $data, $imagePath = null)
+    {
+        $sql = "UPDATE products SET name = :name, price = :price, stock = :stock, 
             description = :description, category_id = :category_id, brand_id = :brand_id 
             WHERE id = :id";
-    $stmt = $this->conn->prepare($sql);
-    $result = $stmt->execute([
-        ':name' => $data['name'],
-        ':price' => (int)$data['price'],
-        ':stock' => (int)$data['stock'],
-        ':description'  => !empty($data['description']) ? $data['description'] : null,
-        ':category_id' => (int)$data['category_id'],
-        ':brand_id' => !empty($data['brand_id']) ? (int)$data['brand_id'] : null,
-        ':id' => (int)$id
-    ]);
+        $stmt = $this->conn->prepare($sql);
+        $result = $stmt->execute([
+            ':name' => $data['name'],
+            ':price' => (int)$data['price'],
+            ':stock' => (int)$data['stock'],
+            ':description'  => !empty($data['description']) ? $data['description'] : null,
+            ':category_id' => (int)$data['category_id'],
+            ':brand_id' => !empty($data['brand_id']) ? (int)$data['brand_id'] : null,
+            ':id' => (int)$id
+        ]);
 
-    if ($imagePath) {
-        $this->conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
-        $this->conn->prepare("INSERT INTO product_images (product_id, image_path, is_main) VALUES (?, ?, true)")->execute([$id, $imagePath]);
+        if ($imagePath) {
+            $this->conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
+            $this->conn->prepare("INSERT INTO product_images (product_id, image_path, is_main) VALUES (?, ?, true)")->execute([$id, $imagePath]);
+        }
+        return $result;
     }
-    return $result;
-}
 
-public function deleteProduct($id) {
-    $this->conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
-    $stmt = $this->conn->prepare("DELETE FROM products WHERE id = ?");
-    return $stmt->execute([$id]);
-}
+    public function deleteProduct($id)
+    {
+        $this->conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
+        $stmt = $this->conn->prepare("DELETE FROM products WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }
