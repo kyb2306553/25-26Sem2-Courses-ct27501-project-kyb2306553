@@ -48,12 +48,17 @@ $currentUrl = $_GET['url'] ?? '';
                         hàng (<?php echo $cartCount; ?>)</a>
 
                     <?php if ($currentUser !== null) { ?>
+
                         <span class="text-muted small">Xin chào,
                             <?php echo htmlspecialchars((string) $currentUser['full_name']); ?></span>
+
                         <form action="/logout.php" method="POST" class="d-inline-block m-0">
-                            <input type="hidden" name="sesskey" value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
-                            <button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Đăng xuất</button>
+                            <input type="hidden" name="sesskey"
+                                value="<?php echo htmlspecialchars((string) $_SESSION['sesskey']); ?>">
+                            <button type="submit" class="nav-link btn btn-link p-0 border-0 align-baseline">Đăng
+                                xuất</button>
                         </form>
+
                     <?php } else { ?>
                         <a class="nav-link <?php echo in_array($currentPage, ['login.php', 'register.php'], true) ? 'active' : ''; ?>"
                             href="/login.php">Đăng nhập</a>

@@ -21,9 +21,7 @@ class UserModel
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':email', trim((string) $email), PDO::PARAM_STR);
         $stmt->execute();
-
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
         return $user ?: null;
     }
 
@@ -33,9 +31,7 @@ class UserModel
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':phone', $this->normalizePhone($phone), PDO::PARAM_STR);
         $stmt->execute();
-
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
         return $user ? $user : null;
     }
 
